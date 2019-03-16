@@ -1,0 +1,110 @@
+#include <iostream>
+using namespace std;
+int main()
+{
+	//Variable declaration
+	char fullName[50], adress[50]="", fullAdress[75]="", firstName[25]="", lastName[25]="", city[25]="", province[25]="", postalCode[25]="";
+	
+	int N = 0, I=0, flag = 0, flag2 = 0;
+
+	//Display
+	cout << "\t CONTACT MANAGER \n";
+	cout << "\t --------------- \n";
+	cout << "Enter your first name and last name (separated by a comma): ";
+	cin.getline(fullName, 50);
+	cout << "Enter your adress: ";
+	cin.getline(adress, 50);
+	cout << "Enter your city, province and postal code (separated by a comma): ";
+	cin.getline(fullAdress, 75);
+	cout << "Thanks, your informations are saved as: " << endl;
+
+	//Copy first name
+	while (fullName[N]!='\0')
+	{
+		fullName[N] = tolower(fullName[N]);
+
+		if (fullName[N] == ',')
+		{
+			strncpy_s(firstName, fullName, N);
+			break;
+		}
+		
+		N++;
+	}
+	
+	//Copy last name
+	while (fullName[N]!='\0')
+	{
+
+		if (fullName[N] != firstName[N] && fullName[N]!=',')
+		{
+			lastName[I] = fullName[N];
+			I++;
+		}
+		
+		N++;
+	}
+
+
+	//Find first ',' in the adress
+	N = 0;
+	while (fullAdress[N] != '\0')
+	{
+		fullAdress[N] = tolower(fullAdress[N]);
+		if (fullAdress[N] == ',')
+		{
+			flag = N;
+			break;
+		}
+
+		N++;
+	}
+
+	//Copy first part of the adress in City
+	strncpy_s(city, fullAdress, flag);
+	
+	//Find second ','
+	while (fullAdress[N] != '\0')
+	{
+		fullAdress[N] = tolower(fullAdress[N]);
+		if (fullAdress[N] == ',')
+		{
+			flag2 = N;
+		}
+
+		N++;
+	}
+
+	//Give value to province
+	I = 0;
+	for (N = flag + 1 ; N < flag2 ; N++)
+	{
+		province[I] = fullAdress[N];
+		I++;
+	}
+
+	//Give value to Postal code
+	I = 0;
+	for (N = flag2+1; fullAdress[N] != '\0'; N++)
+	{
+		postalCode[I] = toupper(fullAdress[N]);
+		I++;
+	}
+
+	
+	//Uppercase first letters
+	lastName[0] = toupper(lastName[0]);
+	firstName[0] = toupper(firstName[0]);
+	city[0] = toupper(city[0]);
+	province[0] = toupper(province[0]);
+
+	//Display infos
+	cout << " -FirstName: " << firstName << endl;
+	cout << " -LastName: " << lastName << endl;
+	cout <<" -Adress: " << adress << endl;
+	cout << " -City: " << city <<endl;
+	cout << " -Province: " << province << endl;
+	cout << " -Postal Code: " << postalCode << endl;
+	system("pause");
+	return 0;
+}
