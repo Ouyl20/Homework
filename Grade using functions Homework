@@ -1,0 +1,141 @@
+CPP FILE WITH NO FOR LOOP
+#include "CGradesFunctions.h"
+
+int main()
+{
+	//Declare variables
+	float grade[20];
+	int nbStudents; 
+
+	//Display title
+	DisplayTitle("Lasalle College");
+
+	//Find nbStudents
+	nbStudents = ReadNbStudents();
+
+	//Find Grades without for loop
+	grade[20] = ReadGrades(grade, nbStudents);
+
+	//Display Grades
+	DisplayGrades(grade, nbStudents);
+
+	//Display Results without for loop
+	DisplayResults(CalculateAverage(CalculateSum(grade, nbStudents), nbStudents), CalculateBest(grade, nbStudents), CalculateWorst(grade, nbStudents));
+
+	system("pause");
+	return 0;
+}
+
+HEADER FILE WITH NO FOR LOOP
+
+#pragma once
+#include <iostream>
+#include <string>
+using namespace std;
+
+//Display title
+void DisplayTitle(string title)
+{
+	int I;
+	char underline[50] = "";
+	for (I = 0; I <= title.length(); I++)
+	{
+		title[I] = toupper(title[I]);
+		underline[I] = '-';
+	}
+	underline[I] = '\0';
+	cout << "\t " << title << "\n";
+	cout << "\t " << underline << "\n\n";
+}
+
+//Read nb of students
+int ReadNbStudents()
+{
+	int nbStudents;
+	do
+	{
+		cout << "Enter the number of Students (max 20): ";
+		cin >> nbStudents;
+	} while (nbStudents > 20 || nbStudents < 0);
+	return nbStudents;
+}
+
+
+//ReadGrades
+float ReadGrades (float grade[20],int nbStudents)
+{
+	for (int I = 0; I < nbStudents; I++)
+	{
+		do
+		{
+			cout << "Enter Grade " << I+1 << ": ";
+			cin >> grade[I];
+		} while (grade[I]< 0 || grade[I]>100);
+
+	}
+	return grade[20];
+}
+
+
+//Calculate Sum
+float CalculateSum(float grade[20], int nbStudents)
+{
+	float sum = 0;
+	for (int I = 0; I < nbStudents; I++)
+	{
+		sum += grade[I];
+	}
+
+	return sum;
+}
+
+//Calculate best
+float CalculateBest(float grade[20], int nbStudents)
+{
+	float best = 0;
+	for (int I = 0; I < nbStudents; I++)
+	{
+		best = (best >= grade[I]) ? best : grade[I];
+	}
+
+	return best;
+}
+
+
+//Calculate worst
+float CalculateWorst(float grade[20], int nbStudents)
+{
+	float worst = 100;
+	for (int I = 0; I < nbStudents; I++)
+	{
+		worst = (worst <= grade[I]) ? worst : grade[I];
+	}
+
+	return worst;
+}
+
+
+//Display Grades
+void DisplayGrades(float grade[20], int nbStudents)
+{
+	cout << "Thanks, \n";
+	cout << "The class grades \n";
+	for (int I=0; I < nbStudents; I++)
+	{
+		cout << "\t " << I+1 << " - " << grade[I] << endl;
+	}
+}
+
+//Calculate Average
+float CalculateAverage(float sum, int nbStudents)
+{
+	return sum / nbStudents;
+}
+
+//Display Results
+void DisplayResults(float avg, float best, float worst)
+{
+	cout << "The class average is: " << avg << endl;
+	cout << "The best grade is: " << best << endl;
+	cout << "The worst grade is: " << worst << endl;
+}
