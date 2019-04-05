@@ -1,0 +1,145 @@
+CPP FILE:
+#include "ReadGandNFunctions.h"
+
+int main()
+{
+	//Declaring variables
+	float tabGrades[20], best, worst;
+	int nbStudents = 0;
+	string tabNames[20];
+
+	DisplayTitle("college lasalle");
+	nbStudents = ReadNbStuds();
+	ReadInfo(tabGrades, tabNames, nbStudents);
+	DisplayHeaders();
+	DisplayInfo(tabGrades, tabNames, nbStudents);
+	DisplayAverage(tabGrades, nbStudents);
+	best = CalculateBest(tabGrades, nbStudents);
+	worst = CalculateWorst(tabGrades, nbStudents);
+	DisplayResults("best", best, tabGrades, tabNames, nbStudents);
+	DisplayResults("worst", worst, tabGrades, tabNames, nbStudents);
+
+	system("pause");
+	return 0;
+}
+
+HEADER FILE:
+#pragma once
+#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+//Display title
+void DisplayTitle(string title)
+{
+	int I;
+	char underline[50] = "";
+	for (I = 0; I <= title.length(); I++)
+	{
+		title[I] = toupper(title[I]);
+		underline[I] = '-';
+	}
+	underline[I] = '\0';
+	cout << "\t " << title << "\n";
+	cout << "\t " << underline << "\n\n";
+}
+
+//Read nb of students
+int ReadNbStuds()
+{
+	int nbStudents;
+	do
+	{
+		cout << "Enter the number of students (max 20): ";
+		cin >> nbStudents;
+	} while (nbStudents < 2 || nbStudents > 20);
+
+	return nbStudents;
+}
+
+//Read Student Info
+void ReadInfo(float tabGrade[], string tabName[], int nbStudents)
+{
+	
+	for (int I=0; I < nbStudents; I++)
+	{
+		cin.ignore();
+		cout << "Student " << I + 1 << endl;
+		cout << setw(8) << "Name: ";
+		getline(cin, tabName[I]);
+
+		do
+		{
+			cout << setw(9) << "Grade: ";
+			cin >> tabGrade[I];
+		} while (tabGrade[I] < 0 || tabGrade[I] > 100);
+
+		
+	}
+}
+
+//Display Title
+void DisplayHeaders()
+{
+	cout << "Numbers" << setw(15) << "Names" << setw(17) << "Grades\n";
+}
+
+//Display Info
+void DisplayInfo(float tabGrade[], string tabName[], int nbStudents)
+{
+	for (int I = 0; I < nbStudents; I++)
+	{
+		cout << "   " << left << setw(14) << I + 1 << setw(16) << tabName[I] << tabGrade[I] << endl;
+	}
+
+}
+
+//Calculate Class Average
+void DisplayAverage(float tabGrades[], int nbStudents)
+{
+	float sum = 0, avg = 0;
+	for (int I = 0; I < nbStudents; I++)
+	{
+		sum += tabGrades[I];
+	}
+	avg = sum / nbStudents;
+	cout << "The class average is " << avg << endl;
+}
+
+//Calculate Best
+float CalculateBest(float tabGrades[], int nbStudents)
+{
+	float best = 0;
+	for (int I = 0; I < nbStudents; I++)
+	{
+		best = (tabGrades[I]>best)? tabGrades[I] : best;
+	}
+
+	return best;
+}
+
+//Calculate Worst
+float CalculateWorst(float tabGrades[], int nbStudents)
+{
+	float worst = 100;
+	for (int I = 0; I < nbStudents; I++)
+	{
+		worst = (tabGrades[I] < worst) ? tabGrades[I] : worst;
+	}
+
+	return worst;
+}
+
+//Display Results
+void DisplayResults(string text, float info, float tabGrades[],string tabNames[], int nbStudents)
+{
+	cout << "The " << text << " Student(s)" << endl;
+	for (int I = 0; I < nbStudents; I++)
+	{
+		if (tabGrades[I] == info)
+		{
+			cout << "   " << left << setw(14) << I + 1 << setw(16) << tabNames[I] << tabGrades[I] << endl;
+		}
+	}
+}
