@@ -1,0 +1,146 @@
+CPP FILE
+#include "RBfunctions.h";
+
+int main()
+{
+	Client tabClients[100];
+	int NB, ID, balance;
+	DisplayTitle("Royale-Bank");
+	NB = ReadAllClients(tabClients);
+	DisplayAllClients(tabClients, NB);
+	DisplayATM;
+	ID = ReadClientNumber(tabClients, NB);
+	ReadClientPin(tabClients, NB, ID);
+	tabClients[ID].balance = Transaction(tabClients, NB, ID);
+	DisplayOneClient(tabClients[ID]);
+	system("pause");
+	return 0;
+}
+
+HEADER FILE
+#pragma once
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <fstream>
+using namespace std;
+
+struct Client
+{
+	string number;
+	string name;
+	string pin;
+	long balance;
+};
+
+//Display title
+void DisplayTitle(string title)
+{
+	int I;
+	char underline[50] = "";
+	for (I = 0; I <= title.length(); I++)
+	{
+		title[I] = toupper(title[I]);
+		underline[I] = '-';
+	}
+	underline[I] = '\0';
+	cout << "\t " << title << "\n";
+	cout << "\t " << underline << "\n";
+	cout << setw(18) << "ATM \n";
+	cout << setw(19) << "--- \n\n";
+}
+
+int ReadAllClients(Client tab[])
+{
+	ifstream myFile;
+	int I = 0;
+	myFile.open("RoyalBank.txt");
+	while (!myFile.eof())
+	{
+		myFile >> tab[I].number;
+		myFile.ignore();
+		getline(myFile, tab[I].name);
+		myFile >> tab[I].pin;
+		myFile >> tab[I].balance;
+		I++;
+	}
+
+	return I;
+}
+
+
+void DisplayOneClient(Client client)
+{
+	cout << left << setw(25) << client.number << setw(25) << client.name << setw(25) << client.pin << client.balance << endl;
+}
+
+void DisplayAllClients(Client tab[], int nb)
+{
+	cout << left << setw(25) << "Numbers" << setw(25) << "Names" << setw(25) << "Password" << "Balance" << endl;
+
+	for (int I = 0; I < nb; I++)
+	{
+		DisplayOneClient(tab[I]);
+	}
+}
+
+void DisplayATM()
+{
+	cout << setw(18) << "ATM \n";
+}
+
+int ReadClientNumber(Client client[], int nb)
+{
+	string number;
+	int flag = 0;
+	do
+	{
+		cout << "Enter your client number: ";
+		getline(cin, number);
+		for (int I = 0; I < nb; I++)
+		{
+			if (client[I].number == number)
+			{
+				flag = I+1;
+				break;
+			}
+		}
+	} while (flag = 0);
+
+	return flag;
+}
+
+void ReadClientPin (Client client[], int nb, int ID)
+{
+	string pin;
+	int flag = 0;
+	do
+	{
+		cout << "Welcome " << client[ID].name << " Enter your client pin: ";
+		getline(cin, pin);
+	} while (pin != client[ID].pin);
+
+}
+
+int Transaction (Client client[], int nb, int ID)
+{
+	int amount;
+	int flag = 0;
+	do
+	{
+		cout << "Enter the amount to withdraw: ";
+		cin >> amount;
+		if ((amount % 20) != 0 || amount > 500 || amount > client[ID].balance)
+		{
+			cout << "The amount is invalid\n";
+		}
+		else
+		{
+			cout << "Transaction suceed\n";
+			flag = 1;
+		}
+
+	} while (flag = 0);
+
+	return (client[ID].balance - amount);
+}
